@@ -20,9 +20,9 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 14 complete: `terrain-at` with `get` default. Next (step 15): `:move-unit` rejects
-moving into `:water` (`{:error :impassable}`). Failing test `rejects-move-into-water`
-in `commands_test.clj`.
+Step 15 complete: `:move-unit` rejects `:water` destinations (`:impassable`). Next (step 16):
+a `coords` function listing all `[x y]` positions of a grid, introducing the `for`
+comprehension (en route to parsing a hand-placed ASCII test map, MVP item 3).
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -39,6 +39,7 @@ in `commands_test.clj`.
 - Step 12: `:move-unit` rejects moves farther than one tile (`:too-far`), guard ordered after `:unit-not-found`.
 - Step 13: `:tick` maps over foragers (`vals`, `filter`, `mapv`, `#(...)` lambda) to emit `:food-gathered` events.
 - Step 14: `terrain-at` looks up sparse `:tiles` keyed by position vectors, defaulting to `:grass`.
+- Step 15: `:move-unit` rejects `:water` destinations; ordered `cond` guards let later checks assume earlier ones.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.

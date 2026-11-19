@@ -1,6 +1,6 @@
 (ns rts.application.commands
   (:require
-   [rts.domain.grid :refer [adjacent? in-bounds?]]
+   [rts.domain.grid :refer [adjacent? in-bounds? terrain-at]]
    [rts.domain.state :refer [evolve]]))
 
 (defn decide [state command]
@@ -23,6 +23,8 @@
                        {:error :out-of-bounds}
                        (not (adjacent? to (get-in units [unit-id :position])))
                        {:error :too-far}
+                       (= :water (terrain-at grid to))
+                       {:error :impassable}
                        :else
                        [{:type :unit-moved
                          :unit-id unit-id

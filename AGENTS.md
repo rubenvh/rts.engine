@@ -52,7 +52,7 @@ Each exchange is one small step:
   the step number, the concept learned, and any open questions.
 - **Commit after every completed step**: once the review is done, tests are green and
   `PROGRESS.md` is updated, make a git commit (e.g. `Step 14: terrain-at with get default`)
-  and push to origin.
+  and push to origin. Do not add a `Co-authored-by` trailer.
 - Don't build infrastructure ahead of need (YAGNI).
 
 ## Architecture goals

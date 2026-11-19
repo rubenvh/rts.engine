@@ -77,6 +77,12 @@
 								 :units {2 {:type :hunter :position [0 0]}}}
 								 {:cmd :tick}))))
 
+(deftest rejects-move-into-water
+	(is (= {:error :impassable}
+				 (decide {:grid {:width 6 :height 6 :tiles {[3 3] :water}}
+								 :units {1 {:type :worker :position [2 3]}}}
+								 {:cmd :move-unit :unit-id 1 :to [3 3]}))))
+
 (deftest rejects-move-outside-grid
 	(is (= {:error :out-of-bounds}
 				 (decide {:grid {:width 3 :height 2}
