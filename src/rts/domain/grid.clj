@@ -7,3 +7,6 @@
 (defn adjacent? [pos1 pos2]
   (let [[x1 y1] pos1 [x2 y2] pos2]
     (= 1 (max (Math/abs (- x1 x2)) (Math/abs (- y1 y2))))))
+
+(defn terrain-at [grid pos]
+  (get (:tiles grid) pos :grass))

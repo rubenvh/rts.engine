@@ -20,9 +20,9 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 13 complete: `:tick` emits one `:food-gathered` event per forager. Next (step 14):
-`terrain-at` looks up a tile in `{:tiles {[x y] :water ...}}`, defaulting to `:grass`
-(start of terrain, MVP item 3). Failing test in `grid_test.clj`.
+Step 14 complete: `terrain-at` with `get` default. Next (step 15): `:move-unit` rejects
+moving into `:water` (`{:error :impassable}`). Failing test `rejects-move-into-water`
+in `commands_test.clj`.
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -38,6 +38,7 @@ Step 13 complete: `:tick` emits one `:food-gathered` event per forager. Next (st
 - Step 11: `adjacent?` checks Chebyshev distance with vector destructuring and `Math/abs`.
 - Step 12: `:move-unit` rejects moves farther than one tile (`:too-far`), guard ordered after `:unit-not-found`.
 - Step 13: `:tick` maps over foragers (`vals`, `filter`, `mapv`, `#(...)` lambda) to emit `:food-gathered` events.
+- Step 14: `terrain-at` looks up sparse `:tiles` keyed by position vectors, defaulting to `:grass`.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -58,6 +59,7 @@ Step 13 complete: `:tick` emits one `:food-gathered` event per forager. Next (st
 - Vectors destructure positionally (`[x y]`), in `let` and in parameter lists.
 - Java interop with static methods: `(Math/abs n)`; prefer core functions (`max`) when they exist.
 - Anonymous functions: `(fn [x] ...)` and the `#(... %)` shorthand are Clojure's lambdas.
+- `(get m k default)` and `(get-in m path default)` return a fallback when the key is missing; vectors can be map keys.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.

@@ -50,6 +50,9 @@ Each exchange is one small step:
 - Introduce Lisp basics (prefix notation, REPL, reading nested parentheses) gently in the first steps.
 - Keep a running log of progress in `PROGRESS.md`. Update it after each completed step with
   the step number, the concept learned, and any open questions.
+- **Commit after every completed step**: once the review is done, tests are green and
+  `PROGRESS.md` is updated, make a git commit (e.g. `Step 14: terrain-at with get default`)
+  and push to origin.
 - Don't build infrastructure ahead of need (YAGNI).
 
 ## Architecture goals
