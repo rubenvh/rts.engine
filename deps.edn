@@ -1,0 +1,4 @@
+{:paths ["src"]
+ :aliases
+ {:test {:extra-paths ["test"]
+         :exec-fn rts.test-runner/run-tests}}}
