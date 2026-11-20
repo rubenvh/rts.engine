@@ -20,9 +20,9 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 16 complete: `coords` with `for`. Next (step 17): `parse-map` turns ASCII rows
-(`["~.." ".^."]`, `~`=water `^`=forest `.`=grass) into a grid map with sparse `:tiles`
-(grass omitted). Failing test `parses-ascii-map` in `grid_test.clj`.
+Step 17 complete: `parse-map` turns ASCII rows into a grid. Next (step 18): `:forage`
+only succeeds when the forager stands on `:forest` (`{:error :nothing-to-forage}`) —
+terrain starts driving the economy.
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -41,6 +41,7 @@ Step 16 complete: `coords` with `for`. Next (step 17): `parse-map` turns ASCII r
 - Step 14: `terrain-at` looks up sparse `:tiles` keyed by position vectors, defaulting to `:grass`.
 - Step 15: `:move-unit` rejects `:water` destinations; ordered `cond` guards let later checks assume earlier ones.
 - Step 16: `coords` enumerates grid positions with a `for` comprehension (outer binding varies slowest).
+- Step 17: `parse-map` parses ASCII rows via a `def`'d legend, `for` with `:let`/`:when`, and `into {}`.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -63,6 +64,8 @@ Step 16 complete: `coords` with `for`. Next (step 17): `parse-map` turns ASCII r
 - Anonymous functions: `(fn [x] ...)` and the `#(... %)` shorthand are Clojure's lambdas.
 - `(get m k default)` and `(get-in m path default)` return a fallback when the key is missing; vectors can be map keys.
 - `for` is a lazy comprehension (~ LINQ nested `from`); `=` compares seqs and vectors element-wise; `vec` converts.
+- `for` supports `:let` and `:when` modifiers; maps are functions: `(legend ch :grass)` looks up with a default.
+- `map` the function transforms sequences (LINQ `Select`); it is not map lookup — that's `get` or calling the map.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.

@@ -13,3 +13,17 @@
 
 (defn coords [width height]
   (for [y (range height), x (range width)] [x y]))
+
+(def legend {\~ :water, \^ :forest, \. :grass})
+
+(defn parse-map [rows]
+  (let [height (count rows)
+        width (count (first rows))
+        parse-terrain (fn [x y] (legend (get-in rows [y x]) :grass))]
+    {:width width
+     :height height
+     :tiles (into {}
+                  (for [[x y] (coords width height)
+                        :let [t (parse-terrain x y)]
+                        :when (not= :grass t)]
+                    [[x y] t]))}))

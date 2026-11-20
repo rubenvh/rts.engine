@@ -14,40 +14,8 @@
 ; 
 ; See also the Calva Inspector: https://calva.io/inspector/
 
-(when-let [requires (resolve 'clojure.main/repl-requires)] (clojure.core/apply clojure.core/require @requires))
-clj꞉user꞉> 
-(defn evolve [state event]
-  (case (:type event)
-    :unit-spawned
-    (assoc-in state [:units (:unit-id event)] {:type (:unit-type event) :position (:position event)})
-    :unit-moved
-    (assoc-in state [:units (:unit-id event) :position] (:position event))
-    state))
-clj꞉rts.domain.state꞉> 
-(reduce evolve {:units {}}
-        [{:type :unit-spawned :unit-id 1 :unit-type :worker :position [2 3]}
-         {:type :unit-moved :unit-id 1 :position [4 5]}])
-clj꞉rts.domain.state꞉> 
-(reduce evolve {:units {}}
-        [{:type :unit-spawned :unit-id 1 :unit-type :worker :position [2 3]}
-         ])
-clj꞉rts.domain.state꞉> (reduce evolve {:units {}}
-        [{:type :unit-spawned :unit-id 1 :unit-type :worker :position [2 3]}
-         {:type :unit-moved :unit-id 1 :position [4 5]}])
 
 ; Results are configured to appear in the Output Terminal and Output Sidebar.
 ; To reveal the output, use the command:
 ; > Calva: Show/Open the result output destination
-clj꞉rts.domain.state꞉> (reductions evolve {:units {}}
-        [{:type :unit-spawned :unit-id 1 :unit-type :worker :position [2 3]}
-         {:type :unit-moved :unit-id 1 :position [4 5]}])
-(contains? (:units {:units {1 :worker}}) 99)
-clj꞉rts.application.commands꞉> (defn in-bounds? [position width height]
-                                 (and (<= 0 (first position)) (< (first position) width)
-                                      (<= 0 (second position)) (< (second position) height)))
-
-(in-bounds? [2 1] 3 2)
-(defn in-bounds? [position width height]
-	(and (<= 0 (first position)) (< (first position) width)
-      (<= 0 (second position)) (< (second position) height)))
-clj꞉rts.domain.grid꞉> 
+clj꞉user꞉> (count (first rows))
