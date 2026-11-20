@@ -1,6 +1,11 @@
 (ns rts.domain.grid-test
 	(:require [clojure.test :refer [deftest is]]
-						[rts.domain.grid :refer [in-bounds? adjacent? terrain-at]]))
+						[rts.domain.grid :refer [in-bounds? adjacent? terrain-at coords]]))
+
+(deftest lists-all-coordinates
+	(is (= [[0 0] [1 0] [2 0]
+					[0 1] [1 1] [2 1]]
+				 (coords 3 2))))
 
 (deftest looks-up-terrain
 	(let [grid {:width 3 :height 2 :tiles {[1 0] :water [2 1] :forest}}]

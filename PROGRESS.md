@@ -20,9 +20,9 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 15 complete: `:move-unit` rejects `:water` destinations (`:impassable`). Next (step 16):
-a `coords` function listing all `[x y]` positions of a grid, introducing the `for`
-comprehension (en route to parsing a hand-placed ASCII test map, MVP item 3).
+Step 16 complete: `coords` with `for`. Next (step 17): `parse-map` turns ASCII rows
+(`["~.." ".^."]`, `~`=water `^`=forest `.`=grass) into a grid map with sparse `:tiles`
+(grass omitted). Failing test `parses-ascii-map` in `grid_test.clj`.
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -40,6 +40,7 @@ comprehension (en route to parsing a hand-placed ASCII test map, MVP item 3).
 - Step 13: `:tick` maps over foragers (`vals`, `filter`, `mapv`, `#(...)` lambda) to emit `:food-gathered` events.
 - Step 14: `terrain-at` looks up sparse `:tiles` keyed by position vectors, defaulting to `:grass`.
 - Step 15: `:move-unit` rejects `:water` destinations; ordered `cond` guards let later checks assume earlier ones.
+- Step 16: `coords` enumerates grid positions with a `for` comprehension (outer binding varies slowest).
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -61,6 +62,7 @@ comprehension (en route to parsing a hand-placed ASCII test map, MVP item 3).
 - Java interop with static methods: `(Math/abs n)`; prefer core functions (`max`) when they exist.
 - Anonymous functions: `(fn [x] ...)` and the `#(... %)` shorthand are Clojure's lambdas.
 - `(get m k default)` and `(get-in m path default)` return a fallback when the key is missing; vectors can be map keys.
+- `for` is a lazy comprehension (~ LINQ nested `from`); `=` compares seqs and vectors element-wise; `vec` converts.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.

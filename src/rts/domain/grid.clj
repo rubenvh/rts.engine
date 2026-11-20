@@ -10,3 +10,6 @@
 
 (defn terrain-at [grid pos]
   (get (:tiles grid) pos :grass))
+
+(defn coords [width height]
+  (for [y (range height), x (range width)] [x y]))
