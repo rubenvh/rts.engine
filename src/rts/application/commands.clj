@@ -3,6 +3,10 @@
    [rts.domain.grid :refer [adjacent? in-bounds? terrain-at]]
    [rts.domain.state :refer [evolve]]))
 
+(defn require-unit [units unit-id]
+  (when-not (contains? units unit-id)
+    {:error :unit-not-found}))
+
 (defn decide [state command]
   (let [{:keys [unit-id to at unit-type]} command
         {:keys [units grid]} state
@@ -18,27 +22,25 @@
                           :unit-id unit-id
                           :unit-type unit-type
                           :position at}])
-      :move-unit (cond (not (contains? units unit-id))
-                       {:error :unit-not-found}
-                       (not (in-bounds? to (:width grid) (:height grid)))
-                       {:error :out-of-bounds}
-                       (not (adjacent? to (:position unit)))
-                       {:error :too-far}
-                       (= :water (terrain-at grid to))
-                       {:error :impassable}
-                       :else
-                       [{:type :unit-moved
-                         :unit-id unit-id
-                         :position to}])
-      :forage (cond (not (contains? units unit-id))
-                    {:error :unit-not-found}
-                    (not= :forager (:type unit))
-                    {:error :not-a-forager}
-                    (not= :forest (terrain-at grid (:position unit)))
-                    {:error :nothing-to-forage}
-                    :else
-                    [{:type :food-gathered
-                      :amount 1}])
+      :move-unit (or (require-unit units unit-id)
+                     (cond (not (in-bounds? to (:width grid) (:height grid)))
+                           {:error :out-of-bounds}
+                           (not (adjacent? to (:position unit)))
+                           {:error :too-far}
+                           (= :water (terrain-at grid to))
+                           {:error :impassable}
+                           :else
+                           [{:type :unit-moved
+                             :unit-id unit-id
+                             :position to}]))
+      :forage (or (require-unit units unit-id)
+                  (cond (not= :forager (:type unit))
+                        {:error :not-a-forager}
+                        (not= :forest (terrain-at grid (:position unit)))
+                        {:error :nothing-to-forage}
+                        :else
+                        [{:type :food-gathered
+                          :amount 1}]))
       {:error :unknown-command})))
 
 (defn handle [state command]

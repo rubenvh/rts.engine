@@ -20,9 +20,9 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 17 complete: `parse-map` turns ASCII rows into a grid. Next (step 18): `:forage`
-only succeeds when the forager stands on `:forest` (`{:error :nothing-to-forage}`) —
-terrain starts driving the economy.
+Step 19 complete: `require-unit` + `or` de-duplicates the existence guard. Next (step 20):
+make `:tick` respect terrain — foragers only gather when standing on `:forest`,
+unifying the rule with `:forage` (the inconsistency found in the step-18 review).
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -42,6 +42,8 @@ terrain starts driving the economy.
 - Step 15: `:move-unit` rejects `:water` destinations; ordered `cond` guards let later checks assume earlier ones.
 - Step 16: `coords` enumerates grid positions with a `for` comprehension (outer binding varies slowest).
 - Step 17: `parse-map` parses ASCII rows via a `def`'d legend, `for` with `:let`/`:when`, and `into {}`.
+- Step 18: `:forage` requires `:forest` terrain; cleanup with `not=` and a single `unit` binding.
+- Step 19: `require-unit` helper + `(or error happy-path)` removes duplicated guards.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -66,6 +68,8 @@ terrain starts driving the economy.
 - `for` is a lazy comprehension (~ LINQ nested `from`); `=` compares seqs and vectors element-wise; `vec` converts.
 - `for` supports `:let` and `:when` modifiers; maps are functions: `(legend ch :grass)` looks up with a default.
 - `map` the function transforms sequences (LINQ `Select`); it is not map lookup — that's `get` or calling the map.
+- `or` returns the first truthy value (like C# `??`); an error map is truthy, `nil` falls through.
+- `when-not` returns its body or `nil` — ideal for "error or nothing" checks. `(get m k)` is nil-safe; `(m k)` throws if `m` is nil.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.
