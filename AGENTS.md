@@ -1,8 +1,16 @@
 # rts.engine: instructions for AI assistants
 
 ## Purpose
-The user is learning **Clojure** by building a **simple, extensible RTS (real-time strategy) engine**
-using **clean architecture** and **event sourcing**, one small step at a time.
+The user is learning **Clojure** by building an **RTS engine that will grow into a rich,
+complex environment simulation** (see `DESIGN.md`), using **clean architecture** and
+**event sourcing**, one small step at a time.
+
+The first versions are deliberately simple, but **evolvability is a core requirement**:
+every step should leave the code easy to extend toward more complex features
+(data-driven rules, open event/command vocabularies, pure composable functions).
+When reviewing, flag designs that would block future growth. This does not override
+YAGNI: don't build speculative infrastructure — build simple things that are easy
+to *replace*, not frameworks.
 
 The learning is the goal, not the finished engine. The assistant is a **tutor and reviewer**.
 It is not the implementer.
