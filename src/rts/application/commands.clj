@@ -5,7 +5,8 @@
 
 (defn decide [state command]
   (let [{:keys [unit-id to at unit-type]} command
-        {:keys [units grid]} state]
+        {:keys [units grid]} state
+        unit (units unit-id)]
     (case (:cmd command)
       :tick (mapv (fn [_] {:type :food-gathered :amount 1}) (filter #(= :forager (:type %)) (vals units)))
       :spawn-unit (cond (contains? units unit-id)
@@ -21,7 +22,7 @@
                        {:error :unit-not-found}
                        (not (in-bounds? to (:width grid) (:height grid)))
                        {:error :out-of-bounds}
-                       (not (adjacent? to (get-in units [unit-id :position])))
+                       (not (adjacent? to (:position unit)))
                        {:error :too-far}
                        (= :water (terrain-at grid to))
                        {:error :impassable}
@@ -31,8 +32,10 @@
                          :position to}])
       :forage (cond (not (contains? units unit-id))
                     {:error :unit-not-found}
-                    (not (= :forager (get-in state [:units unit-id :type])))
+                    (not= :forager (:type unit))
                     {:error :not-a-forager}
+                    (not= :forest (terrain-at grid (:position unit)))
+                    {:error :nothing-to-forage}
                     :else
                     [{:type :food-gathered
                       :amount 1}])

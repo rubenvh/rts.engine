@@ -3,11 +3,11 @@
 						[rts.application.commands :refer [decide handle]]))
 
 (deftest handle-applies-decided-events
-	(is (= {:state {:grid {:width 6 :height 6}
+	(is (= {:state {:grid {:width 6 :height 6 :tiles {[2 3] :forest}}
 									:units {1 {:type :forager :position [2 3]}}
 									:resources {:food 1}}
 					:events [{:type :food-gathered :amount 1}]}
-				 (handle {:grid {:width 6 :height 6}
+				 (handle {:grid {:width 6 :height 6 :tiles {[2 3] :forest}}
 									:units {1 {:type :forager :position [2 3]}}}
 								 {:cmd :forage :unit-id 1}))))
 
@@ -50,9 +50,15 @@
 								 :units {1 {:type :forager :position [2 3]}}}
 								 {:cmd :spawn-unit :unit-id 1 :unit-type :hunter :at [0 0]}))))
 
+(deftest rejects-forage-off-forest
+	(is (= {:error :nothing-to-forage}
+				 (decide {:grid {:width 6 :height 6 :tiles {[0 0] :forest}}
+								 :units {1 {:type :forager :position [2 3]}}}
+								 {:cmd :forage :unit-id 1}))))
+
 (deftest decides-food-gathered-event
 	(is (= [{:type :food-gathered :amount 1}]
-				 (decide {:grid {:width 6 :height 6}
+				 (decide {:grid {:width 6 :height 6 :tiles {[2 3] :forest}}
 								 :units {1 {:type :forager :position [2 3]}}}
 								 {:cmd :forage :unit-id 1}))))
 
