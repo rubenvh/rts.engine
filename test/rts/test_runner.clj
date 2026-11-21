@@ -3,6 +3,7 @@
             [rts.application.commands-test]
             [rts.domain.grid-test]
             [rts.domain.state-test]
+            [rts.domain.world-test]
             [rts.smoke-test]))
 
 (defn run-tests [_]

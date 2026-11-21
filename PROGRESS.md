@@ -20,11 +20,10 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 20 complete: `:tick` only pays foragers standing on `:forest`, consistent with
-`:forage`. Next (step 21): a hand-placed test world (`rts.domain.world/initial-state`)
-built with `parse-map`, with terrain variety and a starting forager (MVP item 3).
-Noted: "forager on forest" rule now lives in two places; extract `can-forage?` when it
-next changes.
+Step 21 complete: hand-placed 67×19 test world in `rts.domain.world/initial-state`.
+MVP item 3 done. Next (step 22): start the read-only render adapter (MVP item 4) —
+a pure `terrain-color` function in `rts.adapters.render` mapping terrain keywords to
+RGB triples (Quil dependency comes in the step after, when we wire the window).
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -47,6 +46,7 @@ next changes.
 - Step 18: `:forage` requires `:forest` terrain; cleanup with `not=` and a single `unit` binding.
 - Step 19: `require-unit` helper + `(or error happy-path)` removes duplicated guards.
 - Step 20: `:tick` filters on `and` of type + terrain, reusing `terrain-at`.
+- Step 21: hand-drawn ASCII world as `def` data in `rts.domain.world`; new test namespaces must be added to `test-runner`.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -73,6 +73,8 @@ next changes.
 - `map` the function transforms sequences (LINQ `Select`); it is not map lookup — that's `get` or calling the map.
 - `or` returns the first truthy value (like C# `??`); an error map is truthy, `nil` falls through.
 - `when-not` returns its body or `nil` — ideal for "error or nothing" checks. `(get m k)` is nil-safe; `(m k)` throws if `m` is nil.
+- Sets are functions: `(#{:water} x)` returns `x` or `nil`; `some` returns the first truthy result (LINQ `Any` + witness).
+- Lenient parsing (defaults) hides typos; strict parsing (throwing) surfaces them — a trade-off to choose deliberately.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.
