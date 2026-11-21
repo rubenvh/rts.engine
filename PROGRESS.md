@@ -20,9 +20,11 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 19 complete: `require-unit` + `or` de-duplicates the existence guard. Next (step 20):
-make `:tick` respect terrain — foragers only gather when standing on `:forest`,
-unifying the rule with `:forage` (the inconsistency found in the step-18 review).
+Step 20 complete: `:tick` only pays foragers standing on `:forest`, consistent with
+`:forage`. Next (step 21): a hand-placed test world (`rts.domain.world/initial-state`)
+built with `parse-map`, with terrain variety and a starting forager (MVP item 3).
+Noted: "forager on forest" rule now lives in two places; extract `can-forage?` when it
+next changes.
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -44,6 +46,7 @@ unifying the rule with `:forage` (the inconsistency found in the step-18 review)
 - Step 17: `parse-map` parses ASCII rows via a `def`'d legend, `for` with `:let`/`:when`, and `into {}`.
 - Step 18: `:forage` requires `:forest` terrain; cleanup with `not=` and a single `unit` binding.
 - Step 19: `require-unit` helper + `(or error happy-path)` removes duplicated guards.
+- Step 20: `:tick` filters on `and` of type + terrain, reusing `terrain-at`.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.

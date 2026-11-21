@@ -12,7 +12,10 @@
         {:keys [units grid]} state
         unit (units unit-id)]
     (case (:cmd command)
-      :tick (mapv (fn [_] {:type :food-gathered :amount 1}) (filter #(= :forager (:type %)) (vals units)))
+      :tick (mapv (fn [_] {:type :food-gathered :amount 1}) 
+                  (filter #(and (= :forager (:type %))
+                                (= :forest (terrain-at grid (:position %)))) 
+                          (vals units)))
       :spawn-unit (cond (contains? units unit-id)
                         {:error :unit-id-taken}
                         (not (in-bounds? at (:width grid) (:height grid)))
