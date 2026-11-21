@@ -1,5 +1,6 @@
 (ns rts.test-runner
   (:require [clojure.test :as test]
+            [rts.adapters.render-test]
             [rts.application.commands-test]
             [rts.domain.grid-test]
             [rts.domain.state-test]
