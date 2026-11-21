@@ -20,10 +20,10 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 21 complete: hand-placed 67×19 test world in `rts.domain.world/initial-state`.
-MVP item 3 done. Next (step 22): start the read-only render adapter (MVP item 4) —
-a pure `terrain-color` function in `rts.adapters.render` mapping terrain keywords to
-RGB triples (Quil dependency comes in the step after, when we wire the window).
+Step 23 complete: `draw-world` renders terrain + units in a Quil window
+(`clojure -M:render`). **MVP milestone done** (roadmap items 2–4: tick, terrain, window).
+Next (step 24, roadmap item 5): seasons — tick → day → season, seasonal yield modifiers,
+visible in the window.
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -47,6 +47,8 @@ RGB triples (Quil dependency comes in the step after, when we wire the window).
 - Step 19: `require-unit` helper + `(or error happy-path)` removes duplicated guards.
 - Step 20: `:tick` filters on `and` of type + terrain, reusing `terrain-at`.
 - Step 21: hand-drawn ASCII world as `def` data in `rts.domain.world`; new test namespaces must be added to `test-runner`.
+- Step 22: pure `terrain-color` palette in the render adapter; color is presentation, not domain.
+- Step 23: `draw-world` with Quil (`doseq`, `q/fill`/`q/rect`/`q/ellipse`, `no-stroke`); run with `clojure -M:render`.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -75,6 +77,8 @@ RGB triples (Quil dependency comes in the step after, when we wire the window).
 - `when-not` returns its body or `nil` — ideal for "error or nothing" checks. `(get m k)` is nil-safe; `(m k)` throws if `m` is nil.
 - Sets are functions: `(#{:water} x)` returns `x` or `nil`; `some` returns the first truthy result (LINQ `Any` + witness).
 - Lenient parsing (defaults) hides typos; strict parsing (throwing) surfaces them — a trade-off to choose deliberately.
+- `doseq` is the eager, side-effecting `for` (same `:let`/`:when` modifiers); iterating a map yields `[k v]` pairs — use `vals` for values.
+- Quil: pixel origin top-left, zero-based; shapes stroke by default (`no-stroke`); `ellipse` takes its *center*.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.

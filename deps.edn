@@ -1,4 +1,6 @@
 {:paths ["src"]
+ :deps {quil/quil {:mvn/version "4.3.1563"}}
  :aliases
  {:test {:extra-paths ["test"]
-         :exec-fn rts.test-runner/run-tests}}}
+         :exec-fn rts.test-runner/run-tests}
+  :render {:main-opts ["-m" "rts.adapters.render"]}}}
