@@ -22,8 +22,16 @@ DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 ## Current step
 Step 27 complete: `rts.domain.time` derives `day-of` and `season-of` from the tick
 counter (`quot`/`mod`, seasons vector as function). Next (step 28): show the current
-season (and day) in the status bar; after that, seasonal yield modifiers for foraging
-(roadmap item 5 continues).
+season (and day) in the status bar; then (step 29) a seasonal terrain palette
+(`terrain-color` + season); after that, seasonal yield modifiers (roadmap item 5).
+
+Design session (2026-11-22) reshaped the roadmap in DESIGN.md: mouse input pulled
+before trails (trails need movement); individuals pushed later; new item 7 = first
+art pass (hand-drawn canonical pixel tiles + tint/overlay for seasons, AI variants
+maybe); camera/scrolling folded into world gen (item 6). Decisions recorded in
+DESIGN.md: seasonal look = canonical tile + tint/overlay; seasons change terrain
+*properties* (ice, floods, fords, snow move-cost) as data; passability as
+terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
