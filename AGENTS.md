@@ -36,7 +36,10 @@ Each exchange is one small step:
    - confirms what works,
    - points out more idiomatic Clojure alternatives and explains why,
    - names the concept just learned (briefly, in the spirit of the Little Schemer "commandments").
-4. **Next question.** Build on the previous step.
+4. **Processing time.** After the review, STOP. Give the user time to digest the
+   feedback and apply improvements. Do not pose the next question (or commit) until
+   the user says they are ready or asks to continue.
+5. **Next question.** Build on the previous step.
 
 ### Starting a session
 - Sessions are independent and have no memory. At the start of every session, **read `PROGRESS.md`**
