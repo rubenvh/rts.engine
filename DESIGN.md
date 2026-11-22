@@ -205,24 +205,28 @@ Playtest with her; let her reactions reorder everything after.
 6. World generation: seeded, realistic geography (height → rivers → biomes);
    replaces the hand-placed map. Includes a scrollable camera (UI-only state
    in the render adapter; arrow keys via `:key-pressed`).
-7. Mouse input: click a unit, click a tile → commands. Still one player.
+7. First art pass: pixel-art tiles. Canonical tiles hand-drawn by the players
+   (the engine just loads PNGs); AI-generated variants of the canonicals for
+   variety, maybe. Render adapter: `q/load-image`/`q/image` instead of flat
+   rects; small native resolution, integer-scale up via off-screen buffer.
+8. Mouse input: click a unit, click a tile → commands. Still one player.
    (Pulled forward: trails need movement to mean anything.)
-8. Trails: movement wears tiles into tracks/trails/paths; unused trails decay
+9. Trails: movement wears tiles into tracks/trails/paths; unused trails decay
    each tick; trails speed movement. (Deliberate building comes with the
    craftsman; snow-hiding with seasons polish.)
-9. Soft threats: predators that scare; recovery at the cave.
-10. Individuals: names, age, sex; eating; babies (seeded randomness in events).
-11. Personality & bonds: traits as a fold over each person's experienced
+10. Soft threats: predators that scare; recovery at the cave.
+11. Individuals: names, age, sex; eating; babies (seeded randomness in events).
+12. Personality & bonds: traits as a fold over each person's experienced
     events; shared experiences build bonds.
-12. The painted wall: knowledge and the tech tree as data.
-13. Craftsman economy: tools that improve yields; deliberate trail-clearing;
+13. The painted wall: knowledge and the tech tree as data.
+14. Craftsman economy: tools that improve yields; deliberate trail-clearing;
     adornments (beads, feathers, face paint) for decorating people.
-14. Cave home-building: improvements (hearth, storage, furs, figurines);
+15. Cave home-building: improvements (hearth, storage, furs, figurines);
     coziness and beauty as state that affects recovery, winter and babies.
-15. Scenario layer: goal functions over the sandbox.
-16. Event store, save/load/replay (EDN).
-17. Rival clan AI emitting commands (can follow your trails).
-18. **Co-op input**: the second player joins with a gamepad (mouse+keyboard
+16. Scenario layer: goal functions over the sandbox.
+17. Event store, save/load/replay (EDN).
+18. Rival clan AI emitting commands (can follow your trails).
+19. **Co-op input**: the second player joins with a gamepad (mouse+keyboard
     for player 1, XInput controller for player 2; see co-op technical design).
 
 ## Someday / maybe (ideas parked to protect scope)
