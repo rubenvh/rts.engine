@@ -20,10 +20,10 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 24 complete: game loop via Quil fun-mode — `:setup` returns `initial-state`,
-`:update` applies `{:cmd :tick}` through `handle` (extracting `:state`), food counter
-overlays the map. Next (step 25): a proper status bar strip below the map (window
-taller than the grid; food/resources drawn there), then seasons (roadmap item 5).
+Step 25 complete: status bar strip below the map (`draw-bar`). Next (step 26, start of
+seasons/roadmap item 5): `:tick` also emits a `:time-passed` event; `evolve` increments
+`[:time :tick]`. Failing tests in `state_test.clj` and updated tick tests in
+`commands_test.clj`.
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -50,6 +50,7 @@ taller than the grid; food/resources drawn there), then seasons (roadmap item 5)
 - Step 22: pure `terrain-color` palette in the render adapter; color is presentation, not domain.
 - Step 23: `draw-world` with Quil (`doseq`, `q/fill`/`q/rect`/`q/ellipse`, `no-stroke`); run with `clojure -M:render`.
 - Step 24: game loop with fun-mode middleware; `:update` = `(:state (handle state {:cmd :tick}))`; MVP window now ticks.
+- Step 25: status bar strip below the map; window height = map + bar; `q/text` y is the baseline.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
