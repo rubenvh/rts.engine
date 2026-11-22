@@ -101,6 +101,12 @@ fire-keeping → pottery → fishing → drying meat → sowing wild grain →
   on rare winter nights.
 - Technical: render at a small native resolution and integer-scale up
   (crisp pixels); Quil supports this with an off-screen buffer.
+- Seasonal look (decided): one canonical tile per terrain + programmatic
+  seasonal tint/overlay (snow, golden leaves) — not a full tileset per season.
+- Seasons change terrain *properties*, not just looks (domain, not render):
+  ice passable in winter, swamps freeze/thaw, spring floods, late-summer fords,
+  deep snow raising move cost, mud season slowing trails. Same data shape:
+  season modifies terrain properties.
 
 ## The world: generated, but real
 Maps are procedurally generated yet geographically believable: mountains feed
@@ -234,6 +240,8 @@ Playtest with her; let her reactions reorder everything after.
   A scenario retried?) Decide after playtesting.
 - Cave interior view for decorating (noted under home-building).
 - First dog (from "When the Wolves Sang").
+- Atmosphere layer: weather drawn over tiles — rain, snow, drifting clouds,
+  fireflies, northern lights (art direction's "small touches").
 - Passability as a terrain×traveler relation: terrain *requires* capabilities
   (`:river {:requires #{:swimming :boat}}`), people *have* them via the tech
   tree (swimming, boats, climbing tools, snowshoes). Rules stay data; new tech
