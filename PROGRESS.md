@@ -20,9 +20,10 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 26 complete: `:time-passed` event; `:tick` emits it before forage events.
-Next (step 27): derive day and season from the tick counter in a new `rts.domain.time`
-namespace (`ticks-per-day`, `days-per-season`, seasons cycle) — stored facts, derived views.
+Step 27 complete: `rts.domain.time` derives `day-of` and `season-of` from the tick
+counter (`quot`/`mod`, seasons vector as function). Next (step 28): show the current
+season (and day) in the status bar; after that, seasonal yield modifiers for foraging
+(roadmap item 5 continues).
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -51,6 +52,7 @@ namespace (`ticks-per-day`, `days-per-season`, seasons cycle) — stored facts, 
 - Step 24: game loop with fun-mode middleware; `:update` = `(:state (handle state {:cmd :tick}))`; MVP window now ticks.
 - Step 25: status bar strip below the map; window height = map + bar; `q/text` y is the baseline.
 - Step 26: `:time-passed` event increments `[:time :tick]`; `into [x] xs` prepends; time is a recorded fact.
+- Step 27: `rts.domain.time` — `day-of`/`season-of` derive the calendar from ticks with `quot`/`mod`.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -83,6 +85,8 @@ namespace (`ticks-per-day`, `days-per-season`, seasons cycle) — stored facts, 
 - Quil: pixel origin top-left, zero-based; shapes stroke by default (`no-stroke`); `ellipse` takes its *center*.
 - Quil fun-mode: `:setup` *returns* the state, `:update` is state→state, `:draw` receives it — pure core, I/O at the edge.
 - Reading stack traces: find your own namespace's deepest frame; `(keyword map)` beats `(map keyword)` for nil-safety.
+- `quot`/`mod` for integer division and cycling; store one fact, derive many projections (tick → day → season).
+- Teased, not yet practiced: the `->` threading macro turns nested calls into a pipeline.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.

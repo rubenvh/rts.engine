@@ -13,7 +13,7 @@
         unit (units unit-id)]
     (case (:cmd command)
       :tick (into [{:type :time-passed}]
-                  (mapv (fn [_] {:type :food-gathered :amount 1})
+                  (map (fn [_] {:type :food-gathered :amount 1})
                         (filter #(and (= :forager (:type %))
                                       (= :forest (terrain-at grid (:position %))))
                                 (vals units))))

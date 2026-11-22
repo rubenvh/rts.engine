@@ -4,6 +4,7 @@
             [rts.application.commands-test]
             [rts.domain.grid-test]
             [rts.domain.state-test]
+            [rts.domain.time-test]
             [rts.domain.world-test]
             [rts.smoke-test]))
 
