@@ -203,13 +203,15 @@ Playtest with her; let her reactions reorder everything after.
    (Early on purpose: charm the co-designer.) *(MVP)*
 5. Seasons: tick → day → season; seasonal yield modifiers (visible in the window!).
 6. World generation: seeded, realistic geography (height → rivers → biomes);
-   replaces the hand-placed map.
-7. Trails: movement wears tiles into tracks/trails/paths; unused trails decay
+   replaces the hand-placed map. Includes a scrollable camera (UI-only state
+   in the render adapter; arrow keys via `:key-pressed`).
+7. Mouse input: click a unit, click a tile → commands. Still one player.
+   (Pulled forward: trails need movement to mean anything.)
+8. Trails: movement wears tiles into tracks/trails/paths; unused trails decay
    each tick; trails speed movement. (Deliberate building comes with the
    craftsman; snow-hiding with seasons polish.)
-8. Individuals: names, age, sex; eating; babies (seeded randomness in events).
 9. Soft threats: predators that scare; recovery at the cave.
-10. Mouse input: click a unit, click a tile → commands. Still one player.
+10. Individuals: names, age, sex; eating; babies (seeded randomness in events).
 11. Personality & bonds: traits as a fold over each person's experienced
     events; shared experiences build bonds.
 12. The painted wall: knowledge and the tech tree as data.
