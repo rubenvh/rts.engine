@@ -3,6 +3,7 @@
             [quil.middleware :as m]
             [rts.application.commands :refer [handle]]
             [rts.domain.grid :refer [coords terrain-at]]
+            [rts.domain.time :refer [day-of season-of]]
             [rts.domain.world :refer [initial-state]]))
 
 (def tile-size 24)
@@ -14,13 +15,18 @@
     :water [23 167 246]
     :forest [49 112 38]))
 
+(defn status-text [state]
+  (let [{:keys [resources]} state
+        tick (get-in state [:time :tick] 0)]
+    (str "food: " (:food resources) " | day " (inc (day-of tick)) ", " (name (season-of tick)))))
+
 (defn draw-bar [state]
-  (let [{:keys [grid resources]} state
+  (let [{:keys [grid]} state
         {:keys [width height]} grid]
     (q/fill 0)
     (q/rect 0 (* height tile-size) (* width tile-size) status-bar-height)
     (q/fill 255)
-    (q/text (str "food: " (:food resources)) 10 (+ 15 (* height tile-size)))))
+    (q/text (status-text state) 10 (+ 15 (* height tile-size)))))
 
 (defn draw-world [state]
   (let [{:keys [units grid]} state

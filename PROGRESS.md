@@ -20,10 +20,11 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 27 complete: `rts.domain.time` derives `day-of` and `season-of` from the tick
-counter (`quot`/`mod`, seasons vector as function). Next (step 28): show the current
-season (and day) in the status bar; then (step 29) a seasonal terrain palette
-(`terrain-color` + season); after that, seasonal yield modifiers (roadmap item 5).
+Step 28 complete: pure `status-text` in the render adapter shows food, day and season
+(`name`, `inc` for one-based display; zero-based in the domain). Calendar pacing tuned
+to 10 ticks/day, 10 days/season so seasons are visible during development. Next
+(step 29): a seasonal terrain palette (`terrain-color` + season); after that,
+seasonal yield modifiers (roadmap item 5).
 
 Design session (2026-11-22) reshaped the roadmap in DESIGN.md: mouse input pulled
 before trails (trails need movement); individuals pushed later; new item 7 = first
@@ -61,6 +62,7 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Step 25: status bar strip below the map; window height = map + bar; `q/text` y is the baseline.
 - Step 26: `:time-passed` event increments `[:time :tick]`; `into [x] xs` prepends; time is a recorded fact.
 - Step 27: `rts.domain.time` — `day-of`/`season-of` derive the calendar from ticks with `quot`/`mod`.
+- Step 28: pure `status-text` (food, day, season) in the render adapter; `draw-bar` just paints it.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -94,6 +96,8 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Quil fun-mode: `:setup` *returns* the state, `:update` is state→state, `:draw` receives it — pure core, I/O at the edge.
 - Reading stack traces: find your own namespace's deepest frame; `(keyword map)` beats `(map keyword)` for nil-safety.
 - `quot`/`mod` for integer division and cycling; store one fact, derive many projections (tick → day → season).
+- `name` strips the colon from a keyword; `format` ~ C# `string.Format`; `inc`/`dec` return new values.
+- Zero-based counting in the domain (clean `quot`/`mod`), one-based at the presentation edge (`inc`).
 - Teased, not yet practiced: the `->` threading macro turns nested calls into a pipeline.
 
 ## Open questions / things to revisit
