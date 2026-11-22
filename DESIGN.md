@@ -230,3 +230,7 @@ Playtest with her; let her reactions reorder everything after.
   A scenario retried?) Decide after playtesting.
 - Cave interior view for decorating (noted under home-building).
 - First dog (from "When the Wolves Sang").
+- Passability as a terrain×traveler relation: terrain *requires* capabilities
+  (`:river {:requires #{:swimming :boat}}`), people *have* them via the tech
+  tree (swimming, boats, climbing tools, snowshoes). Rules stay data; new tech
+  adds no code. Introduce with world-gen terrain variety or the tech tree.
