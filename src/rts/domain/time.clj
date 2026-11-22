@@ -1,10 +1,10 @@
 (ns rts.domain.time)
 
+(def seasons [:spring :summer :autumn :winter])
 (def ticks-per-day 10)
 (def days-per-season 10)
 (def ticks-per-season (* ticks-per-day days-per-season))
-
-(def seasons [:spring :summer :autumn :winter])
+(def ticks-per-year (* ticks-per-season (count seasons)))
 
 (defn day-of [tick]
   (quot tick ticks-per-day))

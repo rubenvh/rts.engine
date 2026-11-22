@@ -3,20 +3,35 @@
             [quil.middleware :as m]
             [rts.application.commands :refer [handle]]
             [rts.domain.grid :refer [coords terrain-at]]
-            [rts.domain.time :refer [day-of season-of]]
+            [rts.domain.time :refer [day-of season-of season-progress
+                                     ticks-per-season ticks-per-year]]
             [rts.domain.world :refer [initial-state]]))
 
 (def tile-size 24)
 (def status-bar-height 20)
 
-(defn terrain-color [terrain]
-  (case terrain
-    :grass [124 246 14]
-    :water [23 167 246]
-    :forest [49 112 38]))
+(def palette {:grass {:spring [120 200 80]
+                      :summer [90 160 60]
+                      :autumn [180 150 80]
+                      :winter [200 205 190]}
+              :forest {:spring [70 140 70]
+                       :summer [40 100 45]
+                       :autumn [160 80 35]
+                       :winter [85 70 60]}
+              :water {:spring [70 140 200]
+                      :summer [40 110 180]
+                      :autumn [90 110 140]
+                      :winter [170 200 225]}})
 
 (defn blend [color1 color2 ratio]
   (mapv (fn [a b] (+ a (* ratio (- b a)))) color1 color2))
+
+(defn terrain-color [terrain tick]
+  (let [half-season-ago (mod (- tick (quot ticks-per-season 2)) ticks-per-year)
+        season (season-of half-season-ago)
+        next-season (season-of (+ ticks-per-season half-season-ago))
+        terrain-set (terrain palette)]
+    (blend (season terrain-set) (next-season terrain-set) (season-progress half-season-ago))))
 
 (defn status-text [state]
   (let [{:keys [resources]} state
@@ -36,7 +51,7 @@
         {:keys [width height]} grid]
     (doseq [[x y] (coords width height)
             :let [t (terrain-at grid [x y])
-                  [r g b] (terrain-color t)]]
+                  [r g b] (terrain-color t (get-in state [:time :tick] 0))]]
       (q/fill r g b)
       (q/rect (* x tile-size) (* y tile-size) tile-size tile-size))
     (q/fill 189 88 184)
