@@ -69,7 +69,8 @@
 								 {:cmd :forage :unit-id 1}))))
 
 (deftest decides-tick-gathers-for-each-forager-on-forest
-	(is (= [{:type :food-gathered :amount 1}]
+	(is (= [{:type :time-passed}
+					{:type :food-gathered :amount 1}]
 				 (decide {:grid {:width 6 :height 6 :tiles {[2 3] :forest [0 0] :forest}}
 								 :units {1 {:type :forager :position [2 3]}
 												 2 {:type :hunter :position [0 0]}
@@ -77,7 +78,7 @@
 								 {:cmd :tick}))))
 
 (deftest decides-tick-with-no-foragers
-	(is (= []
+	(is (= [{:type :time-passed}]
 				 (decide {:grid {:width 6 :height 6}
 								 :units {2 {:type :hunter :position [0 0]}}}
 								 {:cmd :tick}))))

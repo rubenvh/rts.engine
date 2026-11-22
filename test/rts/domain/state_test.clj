@@ -32,6 +32,12 @@
          (evolve {}
                  {:type :food-gathered :amount 3}))))
 
+(deftest evolves-time-passed-event
+  (is (= {:time {:tick 1}}
+         (evolve {} {:type :time-passed})))
+  (is (= {:time {:tick 5}}
+         (evolve {:time {:tick 4}} {:type :time-passed}))))
+
 (deftest replays-events-in-order
   (is (= {:units {1 {:type :worker :position [4 5]}}}
          (reduce evolve
