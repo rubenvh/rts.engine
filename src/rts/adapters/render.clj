@@ -15,6 +15,9 @@
     :water [23 167 246]
     :forest [49 112 38]))
 
+(defn blend [color1 color2 ratio]
+  (mapv (fn [a b] (+ a (* ratio (- b a)))) color1 color2))
+
 (defn status-text [state]
   (let [{:keys [resources]} state
         tick (get-in state [:time :tick] 0)]

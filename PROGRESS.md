@@ -20,12 +20,11 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 29 complete: `season-progress` returns an exact ratio (0 ≤ p < 1) of how far the
-current season has advanced, derived from raw ticks (`ticks-per-season` now a shared
-`def`). Decision: seasonal terrain colors will blend *fluidly* (lerp between season
-palettes by progress), not switch discretely. Next (step 30): color interpolation in
-the render adapter (seasonal palette + lerp); after that, seasonal yield modifiers
-(roadmap item 5).
+Step 30 complete: `blend` lerps two RGB colors by a progress ratio (multi-collection
+`mapv`, closure over `ratio`). Decision: each terrain gets a canonical color per
+season, peaking at season *start* and drifting toward the next season's color via
+`season-progress`. Next (step 31): the four-season palette wired into `terrain-color`;
+after that, seasonal yield modifiers (roadmap item 5).
 
 Design session (2026-11-22) reshaped the roadmap in DESIGN.md: mouse input pulled
 before trails (trails need movement); individuals pushed later; new item 7 = first
@@ -65,6 +64,7 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Step 27: `rts.domain.time` — `day-of`/`season-of` derive the calendar from ticks with `quot`/`mod`.
 - Step 28: pure `status-text` (food, day, season) in the render adapter; `draw-bar` just paints it.
 - Step 29: `season-progress` — exact ratio of season elapsed, from raw ticks (fluid season transitions decided).
+- Step 30: `blend` lerps two RGB colors by progress — multi-collection `mapv`, closure over `ratio`.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -101,6 +101,7 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - `name` strips the colon from a keyword; `format` ~ C# `string.Format`; `inc`/`dec` return new values.
 - Zero-based counting in the domain (clean `quot`/`mod`), one-based at the presentation edge (`inc`).
 - Integer `/` yields exact ratios; `==` compares numeric value across types. Keep domain math exact; lose precision only at the edges.
+- `map`/`mapv` accept multiple collections (LINQ `Zip`); anonymous fns are closures — they capture surrounding bindings.
 - Teased, not yet practiced: the `->` threading macro turns nested calls into a pipeline.
 
 ## Open questions / things to revisit
