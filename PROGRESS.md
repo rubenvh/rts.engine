@@ -20,11 +20,12 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 28 complete: pure `status-text` in the render adapter shows food, day and season
-(`name`, `inc` for one-based display; zero-based in the domain). Calendar pacing tuned
-to 10 ticks/day, 10 days/season so seasons are visible during development. Next
-(step 29): a seasonal terrain palette (`terrain-color` + season); after that,
-seasonal yield modifiers (roadmap item 5).
+Step 29 complete: `season-progress` returns an exact ratio (0 ≤ p < 1) of how far the
+current season has advanced, derived from raw ticks (`ticks-per-season` now a shared
+`def`). Decision: seasonal terrain colors will blend *fluidly* (lerp between season
+palettes by progress), not switch discretely. Next (step 30): color interpolation in
+the render adapter (seasonal palette + lerp); after that, seasonal yield modifiers
+(roadmap item 5).
 
 Design session (2026-11-22) reshaped the roadmap in DESIGN.md: mouse input pulled
 before trails (trails need movement); individuals pushed later; new item 7 = first
@@ -63,6 +64,7 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Step 26: `:time-passed` event increments `[:time :tick]`; `into [x] xs` prepends; time is a recorded fact.
 - Step 27: `rts.domain.time` — `day-of`/`season-of` derive the calendar from ticks with `quot`/`mod`.
 - Step 28: pure `status-text` (food, day, season) in the render adapter; `draw-bar` just paints it.
+- Step 29: `season-progress` — exact ratio of season elapsed, from raw ticks (fluid season transitions decided).
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -98,6 +100,7 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - `quot`/`mod` for integer division and cycling; store one fact, derive many projections (tick → day → season).
 - `name` strips the colon from a keyword; `format` ~ C# `string.Format`; `inc`/`dec` return new values.
 - Zero-based counting in the domain (clean `quot`/`mod`), one-based at the presentation edge (`inc`).
+- Integer `/` yields exact ratios; `==` compares numeric value across types. Keep domain math exact; lose precision only at the edges.
 - Teased, not yet practiced: the `->` threading macro turns nested calls into a pipeline.
 
 ## Open questions / things to revisit
