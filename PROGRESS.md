@@ -20,10 +20,10 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 23 complete: `draw-world` renders terrain + units in a Quil window
-(`clojure -M:render`). **MVP milestone done** (roadmap items 2–4: tick, terrain, window).
-Next (step 24, roadmap item 5): seasons — tick → day → season, seasonal yield modifiers,
-visible in the window.
+Step 24 complete: game loop via Quil fun-mode — `:setup` returns `initial-state`,
+`:update` applies `{:cmd :tick}` through `handle` (extracting `:state`), food counter
+overlays the map. Next (step 25): a proper status bar strip below the map (window
+taller than the grid; food/resources drawn there), then seasons (roadmap item 5).
 
 ## Completed steps
 - Step 1: project setup; `clojure -X:test` passes.
@@ -49,6 +49,7 @@ visible in the window.
 - Step 21: hand-drawn ASCII world as `def` data in `rts.domain.world`; new test namespaces must be added to `test-runner`.
 - Step 22: pure `terrain-color` palette in the render adapter; color is presentation, not domain.
 - Step 23: `draw-world` with Quil (`doseq`, `q/fill`/`q/rect`/`q/ellipse`, `no-stroke`); run with `clojure -M:render`.
+- Step 24: game loop with fun-mode middleware; `:update` = `(:state (handle state {:cmd :tick}))`; MVP window now ticks.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -79,6 +80,8 @@ visible in the window.
 - Lenient parsing (defaults) hides typos; strict parsing (throwing) surfaces them — a trade-off to choose deliberately.
 - `doseq` is the eager, side-effecting `for` (same `:let`/`:when` modifiers); iterating a map yields `[k v]` pairs — use `vals` for values.
 - Quil: pixel origin top-left, zero-based; shapes stroke by default (`no-stroke`); `ellipse` takes its *center*.
+- Quil fun-mode: `:setup` *returns* the state, `:update` is state→state, `:draw` receives it — pure core, I/O at the edge.
+- Reading stack traces: find your own namespace's deepest frame; `(keyword map)` beats `(map keyword)` for nil-safety.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.

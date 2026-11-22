@@ -1,5 +1,7 @@
 (ns rts.adapters.render
   (:require [quil.core :as q]
+            [quil.middleware :as m]
+            [rts.application.commands :refer [handle]]
             [rts.domain.grid :refer [coords terrain-at]]
             [rts.domain.world :refer [initial-state]]))
 
@@ -13,7 +15,7 @@
 
 (defn draw-world [state]
   (q/no-stroke)
-  (let [{:keys [units grid]} state
+  (let [{:keys [units grid resources]} state
         {:keys [width height]} grid]
     (doseq [[x y] (coords width height)
             :let [t (terrain-at grid [x y])
@@ -23,7 +25,9 @@
     (q/fill 189 88 184)
     (doseq [{:keys [position]} (vals units)
             :let [[x y] position]]
-      (q/ellipse (+ (/ tile-size 2) (* x tile-size)) (+ (/ tile-size 2) (* y tile-size)) tile-size tile-size))))
+      (q/ellipse (+ (/ tile-size 2) (* x tile-size)) (+ (/ tile-size 2) (* y tile-size)) tile-size tile-size))
+    (q/fill 0) 
+    (q/text (str "food: " (:food resources)) 10 16)))
 
 (defn setup []
   (q/frame-rate 1))
@@ -33,5 +37,7 @@
     (q/sketch
      :title "rts.engine"
      :size [(* tile-size width) (* tile-size height)]
-     :setup setup
-     :draw #(draw-world initial-state))))
+     :middleware [m/fun-mode]
+     :setup  (fn [] (setup) initial-state)
+     :update (fn [state] (:state (handle state  {:cmd :tick})))
+     :draw draw-world)))
