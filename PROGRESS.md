@@ -20,12 +20,12 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 32 complete: seasonal yields as data (`yields` map, winter = 0); `:tick` computes
-a per-forager amount, then drops zero-amount events — "gathered 0 food" is not a fact.
-Pipeline rewritten with `->>` (thread-last, ~ F# `|>`) and `comp`. Roadmap item 5 done:
-the world looks *and behaves* seasonally. Next: roadmap item 6-ish — mouse input
-(select a forager, command a move), which will also force decoupling tick from frame
-rate (fixed-timestep loop).
+Step 33 complete: food consumption. `evolve` handles `:food-consumed` (clamped at 0 via
+`fnil`-wrapped lambda); `decide`'s `:tick` emits one meal per unit on the tick that
+completes a day (`day-passed?` in `rts.domain.time`); `yields` refactored to new
+`rts.domain.economy`. Survival loop is live: summer surplus, winter drain. Next:
+mouse input (select a forager, command a move) — will also force decoupling tick
+from frame rate (fixed-timestep loop).
 
 Design session (2026-11-22) reshaped the roadmap in DESIGN.md: mouse input pulled
 before trails (trails need movement); individuals pushed later; new item 7 = first
@@ -68,6 +68,7 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Step 30: `blend` lerps two RGB colors by progress — multi-collection `mapv`, closure over `ratio`.
 - Step 31: seasonal `palette` as data; `terrain-color` blends season→next with a mid-season-peak shifted clock.
 - Step 32: seasonal `yields` as data; per-forager amounts, zero-amount events dropped; `->>` pipeline + `comp`.
+- Step 33: `:food-consumed` (clamped at 0) on day completion; `day-passed?`; `rts.domain.economy` extracted.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -108,6 +109,8 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Shift the clock, not the data (coordinate transform); `mod` wraps negatives correctly where `quot` rounds toward zero.
 - `->>` threads a value through last-argument positions (~ F# `|>`); `->` threads first (for `assoc`-style map fns); `comp` composes functions.
 - Events are facts worth recording: emit no event rather than a zero-amount one; keeps the replay log meaningful.
+- `fnil` decorates any function with nil-safety; `(seq coll)` is the idiomatic non-empty test (~ LINQ `Any()`).
+- When a pipeline's shape diverges, name the parts in a `let`; `->>` for seq transforms, `->` for building values.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.

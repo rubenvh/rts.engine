@@ -32,6 +32,19 @@
          (evolve {}
                  {:type :food-gathered :amount 3}))))
 
+(deftest evolves-food-consumed-event
+  (is (= {:resources {:food 4}}
+         (evolve {:resources {:food 7}}
+                 {:type :food-consumed :amount 3}))))
+
+(deftest food-never-goes-below-zero
+  (is (= {:resources {:food 0}}
+         (evolve {:resources {:food 2}}
+                 {:type :food-consumed :amount 5})))
+  (is (= {:resources {:food 0}}
+         (evolve {}
+                 {:type :food-consumed :amount 5}))))
+
 (deftest evolves-time-passed-event
   (is (= {:time {:tick 1}}
          (evolve {} {:type :time-passed})))

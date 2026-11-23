@@ -10,5 +10,7 @@
     (assoc-in state [:units (:unit-id event) :position] (:position event))
     :food-gathered
     (update-in state [:resources :food] (fnil + 0) (:amount event))
+    :food-consumed
+    (update-in state [:resources :food] (fnil (fn [s n] (max 0 (- s n))) 0) (:amount event))
     state))
 

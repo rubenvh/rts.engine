@@ -14,3 +14,6 @@
 
 (defn season-progress [tick]
   (/ (mod tick ticks-per-season) ticks-per-season))
+
+(defn day-passed? [tick]
+  (not= (day-of tick) (day-of (inc tick))))
