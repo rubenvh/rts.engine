@@ -1,6 +1,6 @@
 (ns rts.application.commands
   (:require
-   [rts.domain.economy :refer [yields]]
+   [rts.domain.economy :refer [food-consumption yields]]
    [rts.domain.grid :refer [adjacent? in-bounds? terrain-at]]
    [rts.domain.state :refer [evolve]]
    [rts.domain.time :refer [day-passed? season-of]]))
@@ -21,7 +21,7 @@
                                 (map (fn [_] {:type :food-gathered :amount ((season-of tick) yields)}))
                                 (filter (comp pos? :amount)))
                   meals (when (and (day-passed? tick) (seq units))
-                          [{:type :food-consumed :amount (count units)}])]
+                          [{:type :food-consumed :amount (food-consumption units)}])]
               (-> [{:type :time-passed}]
                   (into gathered)
                   (into meals)))

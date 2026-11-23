@@ -1,7 +1,8 @@
 (ns rts.application.commands-test
 	(:require [clojure.test :refer [deftest is]]
-						[rts.application.commands :refer [decide handle]]
-						[rts.domain.time :refer [ticks-per-day ticks-per-season]]))
+           [rts.application.commands :refer [decide handle]]
+           [rts.domain.economy :refer [food-per-unit]]
+           [rts.domain.time :refer [ticks-per-day ticks-per-season]]))
 
 (deftest handle-applies-decided-events
 	(is (= {:state {:grid {:width 6 :height 6 :tiles {[2 3] :forest}}
@@ -105,7 +106,7 @@
 				last-tick-of-day (dec ticks-per-day)]
 		;; this tick completes the day: everyone eats
 		(is (= [{:type :time-passed}
-						{:type :food-consumed :amount 2}]
+						{:type :food-consumed :amount (* food-per-unit 2)}]
 					 (decide (world last-tick-of-day) {:cmd :tick})))
 		;; mid-day tick: no meal
 		(is (= [{:type :time-passed}]
