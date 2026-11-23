@@ -1,22 +1,28 @@
 (ns rts.application.commands
   (:require
    [rts.domain.grid :refer [adjacent? in-bounds? terrain-at]]
-   [rts.domain.state :refer [evolve]]))
+   [rts.domain.state :refer [evolve]]
+   [rts.domain.time :refer [season-of]]))
 
 (defn require-unit [units unit-id]
   (when-not (contains? units unit-id)
     {:error :unit-not-found}))
+
+(def yields {:spring 1 :summer 2 :autumn 1 :winter 0})
 
 (defn decide [state command]
   (let [{:keys [unit-id to at unit-type]} command
         {:keys [units grid]} state
         unit (units unit-id)]
     (case (:cmd command)
-      :tick (into [{:type :time-passed}]
-                  (map (fn [_] {:type :food-gathered :amount 1})
-                        (filter #(and (= :forager (:type %))
-                                      (= :forest (terrain-at grid (:position %))))
-                                (vals units))))
+      :tick (let [tick (get-in state [:time :tick] 0)
+                  season (season-of tick)]
+              (->> (vals units)
+                   (filter #(and (= :forager (:type %))
+                                 (= :forest (terrain-at grid (:position %)))))
+                   (map (fn [_] {:type :food-gathered :amount (season yields)}))
+                   (filter (comp pos? :amount))
+                   (into [{:type :time-passed}])))
       :spawn-unit (cond (contains? units unit-id)
                         {:error :unit-id-taken}
                         (not (in-bounds? at (:width grid) (:height grid)))

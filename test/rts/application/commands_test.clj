@@ -1,6 +1,7 @@
 (ns rts.application.commands-test
 	(:require [clojure.test :refer [deftest is]]
-						[rts.application.commands :refer [decide handle]]))
+						[rts.application.commands :refer [decide handle]]
+						[rts.domain.time :refer [ticks-per-season]]))
 
 (deftest handle-applies-decided-events
 	(is (= {:state {:grid {:width 6 :height 6 :tiles {[2 3] :forest}}
@@ -82,6 +83,19 @@
 				 (decide {:grid {:width 6 :height 6}
 								 :units {2 {:type :hunter :position [0 0]}}}
 								 {:cmd :tick}))))
+
+(deftest tick-yield-varies-with-season
+	(let [world (fn [tick] {:grid {:width 6 :height 6 :tiles {[2 3] :forest}}
+													:units {1 {:type :forager :position [2 3]}}
+													:time {:tick tick}})
+				mid-summer (+ ticks-per-season (quot ticks-per-season 2))
+				mid-winter (+ (* 3 ticks-per-season) (quot ticks-per-season 2))]
+		(is (= [{:type :time-passed}
+						{:type :food-gathered :amount 2}]
+					 (decide (world mid-summer) {:cmd :tick})))
+		;; nothing grows in winter — and "gathered 0 food" is not a fact worth recording
+		(is (= [{:type :time-passed}]
+					 (decide (world mid-winter) {:cmd :tick})))))
 
 (deftest rejects-move-into-water
 	(is (= {:error :impassable}

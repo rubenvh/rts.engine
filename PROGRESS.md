@@ -20,12 +20,12 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 31 complete: seasonal `palette` (terrain → season → RGB, pure data) and
-`terrain-color` blends the current season's canonical color toward the next by
-`season-progress`. Canonical peaks *mid*-season via a shifted clock:
-`(mod (- tick half-season) ticks-per-year)` — `mod` is negative-safe. The map now
-breathes through the year. Next (step 32): seasonal yield modifiers (roadmap item 5)
-— foraging should depend on the season.
+Step 32 complete: seasonal yields as data (`yields` map, winter = 0); `:tick` computes
+a per-forager amount, then drops zero-amount events — "gathered 0 food" is not a fact.
+Pipeline rewritten with `->>` (thread-last, ~ F# `|>`) and `comp`. Roadmap item 5 done:
+the world looks *and behaves* seasonally. Next: roadmap item 6-ish — mouse input
+(select a forager, command a move), which will also force decoupling tick from frame
+rate (fixed-timestep loop).
 
 Design session (2026-11-22) reshaped the roadmap in DESIGN.md: mouse input pulled
 before trails (trails need movement); individuals pushed later; new item 7 = first
@@ -67,6 +67,7 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Step 29: `season-progress` — exact ratio of season elapsed, from raw ticks (fluid season transitions decided).
 - Step 30: `blend` lerps two RGB colors by progress — multi-collection `mapv`, closure over `ratio`.
 - Step 31: seasonal `palette` as data; `terrain-color` blends season→next with a mid-season-peak shifted clock.
+- Step 32: seasonal `yields` as data; per-forager amounts, zero-amount events dropped; `->>` pipeline + `comp`.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -105,7 +106,8 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Integer `/` yields exact ratios; `==` compares numeric value across types. Keep domain math exact; lose precision only at the edges.
 - `map`/`mapv` accept multiple collections (LINQ `Zip`); anonymous fns are closures — they capture surrounding bindings.
 - Shift the clock, not the data (coordinate transform); `mod` wraps negatives correctly where `quot` rounds toward zero.
-- Teased, not yet practiced: the `->` threading macro turns nested calls into a pipeline.
+- `->>` threads a value through last-argument positions (~ F# `|>`); `->` threads first (for `assoc`-style map fns); `comp` composes functions.
+- Events are facts worth recording: emit no event rather than a zero-amount one; keeps the replay log meaningful.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.
