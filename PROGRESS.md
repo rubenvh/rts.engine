@@ -27,9 +27,16 @@ Sketch state reshaped to `{:game <domain> :ui <viewer>}` — selection is UI sta
 never domain (replay must not depend on attention). Tick decoupled from frame rate:
 30 fps render, `:tick` every 30th frame (`q/frame-count` + `mod`); `:update` must
 always return a state. `draw-on-tile` is a user-designed higher-order helper
-(`ellipse-mode :corner` dissolved its boolean flag). Next: right-click issues
-`:move-unit` for the selected unit; later slices: movement over multiple ticks,
-trails. Economy note: one forager feeds `units-fed-per-forager` (3) people in spring.
+(`ellipse-mode :corner` dissolved its boolean flag).
+
+Step 35 complete: right-click issues `:move-unit` for the selected unit — the first
+human-issued command, same `decide`/`handle` path as the clock. `if-let` for
+"selected or bail"; rejected commands (`:too-far`, water, …) silently keep the old
+state (error branch reserved for future feedback). `on-click` branches return
+nil-or-new-state, collapsed by a single `(or … app-state)`. Moves are one adjacent
+tile; pathfinding later. Next candidates: multi-tile movement over ticks
+(pathfinding), feedback for rejected commands, trails, or world generation.
+Economy note: one forager feeds `units-fed-per-forager` (3) people in spring.
 
 Design session (2026-11-22) reshaped the roadmap in DESIGN.md: mouse input pulled
 before trails (trails need movement); individuals pushed later; new item 7 = first
@@ -74,6 +81,7 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Step 32: seasonal `yields` as data; per-forager amounts, zero-amount events dropped; `->>` pipeline + `comp`.
 - Step 33: `:food-consumed` (clamped at 0) on day completion; `day-passed?`; `rts.domain.economy` extracted.
 - Step 34: mouse selection — `pixel->tile`, `unit-at`, `on-click`, `{:game … :ui …}` app state, 30 fps with 1 Hz tick.
+- Step 35: right-click `:move-unit` — first human command through `handle`; `(or branches app-state)` fallback.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -120,6 +128,8 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Maps-are-functions cuts both ways: passing a map where a fn is expected fails silently with nils.
 - `when-let` binds and tests at once; frame handlers must be total (always return state, never nil).
 - Functions are values: pass `q/rect`/`q/ellipse` into your own higher-order helpers; beware the boolean-trap parameter.
+- `if-let` = `when-let` with an else; nil-returning `when` branches + one `(or … fallback)` replace repeated else clauses.
+- Commands-as-data: clock, mouse, and future AI all speak to the same `decide` — input is an adapter concern.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.

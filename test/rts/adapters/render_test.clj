@@ -50,6 +50,20 @@
                                 {:x 120 :y 120 :button :left})
                       [:ui :selected])))))
 
+(deftest right-click-moves-the-selected-unit
+	(let [game {:grid {:width 6 :height 6}
+    					:units {1 {:type :forager :position [2 3]}}}
+    		state {:game game :ui {:selected 1}}]
+    ;; adjacent tile [3 3] = pixels x 72-95, y 72-95
+    (is (= [3 3] (get-in (on-click state {:x 80 :y 80 :button :right})
+                      	 [:game :units 1 :position])))
+    ;; nothing selected: nothing happens
+    (is (= (assoc-in state [:ui :selected] nil)
+    			 (on-click (assoc-in state [:ui :selected] nil)
+    								 {:x 80 :y 80 :button :right})))
+    ;; rejected command (too far): state unchanged
+    (is (= state (on-click state {:x 130 :y 80 :button :right})))))
+
 (deftest status-text-shows-food-day-and-season
   (is (= "food: 3 | day 26, autumn"
          (status-text {:resources {:food 3} :time {:tick 250}})))

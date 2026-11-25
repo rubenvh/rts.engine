@@ -77,10 +77,18 @@
     (draw-bar app-state)))
 
 (defn on-click [app-state click-event]
-  (let [{:keys [x y]} click-event
-        tile (pixel->tile [x y])
-        unit-id (unit-at (:game app-state) tile)]
-    (assoc-in app-state [:ui :selected] unit-id)))
+  (let [{:keys [x y button]} click-event
+        tile (pixel->tile [x y])]
+    (or (case button
+          :left (let [unit-id (unit-at (:game app-state) tile)]
+                  (assoc-in app-state [:ui :selected] unit-id))
+          :right (when-let [selected (get-in app-state [:ui :selected])]
+                   (let [result (handle (:game app-state) {:cmd :move-unit :unit-id selected :to tile})]
+                     (when-not (:error result)
+                       (assoc app-state :game (:state result)))))
+          nil)
+        app-state)))
+
 
 
 (defn setup []
