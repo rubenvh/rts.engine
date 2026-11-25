@@ -1,6 +1,6 @@
 (ns rts.domain.state-test
   (:require [clojure.test :refer [deftest is]]
-            [rts.domain.state :refer [evolve]]))
+            [rts.domain.state :refer [evolve unit-at]]))
 
 (deftest evolves-unit-spawned-event
   (is (= {:units {1 {:type :worker :position [2 3]}}}
@@ -50,6 +50,14 @@
          (evolve {} {:type :time-passed})))
   (is (= {:time {:tick 5}}
          (evolve {:time {:tick 4}} {:type :time-passed}))))
+
+(deftest finds-unit-id-at-position
+  (let [state {:units {1 {:type :forager :position [2 3]}
+                       7 {:type :hunter :position [0 0]}}}]
+    (is (= 1 (unit-at state [2 3])))
+    (is (= 7 (unit-at state [0 0])))
+    (is (nil? (unit-at state [5 5])))
+    (is (nil? (unit-at {} [2 3])))))
 
 (deftest replays-events-in-order
   (is (= {:units {1 {:type :worker :position [4 5]}}}

@@ -20,12 +20,16 @@ MVP item 3 stays a hand-placed test map.
 DESIGN.md now holds the design-driven roadmap; follow it for next steps.
 
 ## Current step
-Step 33 complete: food consumption. `evolve` handles `:food-consumed` (clamped at 0 via
-`fnil`-wrapped lambda); `decide`'s `:tick` emits one meal per unit on the tick that
-completes a day (`day-passed?` in `rts.domain.time`); `yields` refactored to new
-`rts.domain.economy`. Survival loop is live: summer surplus, winter drain. Next:
-mouse input (select a forager, command a move) — will also force decoupling tick
-from frame rate (fixed-timestep loop).
+Step 34 complete: mouse input, first interactive feature. Pure helpers `pixel->tile`
+(conversion-naming `foo->bar`), domain query `unit-at` (returns the *id* — ids are
+references, values are snapshots), `on-click` selects/deselects via `[:ui :selected]`.
+Sketch state reshaped to `{:game <domain> :ui <viewer>}` — selection is UI state,
+never domain (replay must not depend on attention). Tick decoupled from frame rate:
+30 fps render, `:tick` every 30th frame (`q/frame-count` + `mod`); `:update` must
+always return a state. `draw-on-tile` is a user-designed higher-order helper
+(`ellipse-mode :corner` dissolved its boolean flag). Next: right-click issues
+`:move-unit` for the selected unit; later slices: movement over multiple ticks,
+trails. Economy note: one forager feeds `units-fed-per-forager` (3) people in spring.
 
 Design session (2026-11-22) reshaped the roadmap in DESIGN.md: mouse input pulled
 before trails (trails need movement); individuals pushed later; new item 7 = first
@@ -69,6 +73,7 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Step 31: seasonal `palette` as data; `terrain-color` blends season→next with a mid-season-peak shifted clock.
 - Step 32: seasonal `yields` as data; per-forager amounts, zero-amount events dropped; `->>` pipeline + `comp`.
 - Step 33: `:food-consumed` (clamped at 0) on day completion; `day-passed?`; `rts.domain.economy` extracted.
+- Step 34: mouse selection — `pixel->tile`, `unit-at`, `on-click`, `{:game … :ui …}` app state, 30 fps with 1 Hz tick.
 
 ## Concepts learned
 - A Clojure CLI alias can run `clojure.test` with `clojure -X:test`.
@@ -111,6 +116,10 @@ terrain-requires × traveler-capabilities (Someday); atmosphere layer parked.
 - Events are facts worth recording: emit no event rather than a zero-amount one; keeps the replay log meaningful.
 - `fnil` decorates any function with nil-safety; `(seq coll)` is the idiomatic non-empty test (~ LINQ `Any()`).
 - When a pipeline's shape diverges, name the parts in a `let`; `->>` for seq transforms, `->` for building values.
+- Store ids to remember, values to use now — immutable values are snapshots, ids are stable references.
+- Maps-are-functions cuts both ways: passing a map where a fn is expected fails silently with nils.
+- `when-let` binds and tests at once; frame handlers must be total (always return state, never nil).
+- Functions are values: pass `q/rect`/`q/ellipse` into your own higher-order helpers; beware the boolean-trap parameter.
 
 ## Open questions / things to revisit
 - Consider whether unknown events should be ignored or reported as errors.

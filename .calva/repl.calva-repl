@@ -14,8 +14,18 @@
 ; 
 ; See also the Calva Inspector: https://calva.io/inspector/
 
+(when-let [requires (resolve 'clojure.main/repl-requires)] (clojure.core/apply clojure.core/require @requires))
+clj꞉user꞉> 
+(defn unit-at [state pos]
+  (let [{:keys [units]} state]
+    (:unit-id (some #(when (= pos (:position %)) %) (vals units)))))
+clj꞉rts.domain.state꞉>  (unit-at {:units {1 {:position [0 0]}}} [0 1])
 
 ; Results are configured to appear in the Output Terminal and Output Sidebar.
 ; To reveal the output, use the command:
 ; > Calva: Show/Open the result output destination
-clj꞉user꞉> (count (first rows))
+clj꞉rts.domain.state꞉>  (unit-at)
+(defn unit-at [state pos]
+  (let [{:keys [units]} state]
+    (first (some #(when (= pos (:position (second %))) %) units))))
+clj꞉rts.domain.state꞉> state
